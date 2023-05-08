@@ -17,7 +17,7 @@ export function Posts() {
 
   // replace with useQuery
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: "post",
+    queryKey: ["post"],
     queryFn: fetchPosts,
   });
   if (isLoading) return <div>is Loading...</div>;
