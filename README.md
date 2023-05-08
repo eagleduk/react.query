@@ -22,3 +22,17 @@ Code to support the Udemy course [React Query: Server State Management in React]
 5. 페이지에서 동일한 데이터를 요청하는 경우 한번만 서버에 요청할 수 있다. 기존 데이터를 요청중인 경우 요청 제거 후 새로운 데이터 요청 가능
 6. 서버 오류에 대한 재요청 가능
 7. 서버 요청에 대한 실패 / 성공을 구분하여 콜백 요청 가능
+
+## staleTime VS cacheTime
+
+```tsx
+useQuery({
+	staleTime: number | Infinity
+	cacheTime: number | Infinity
+})
+```
+
+| staleTime                          | cacheTime                               |
+| ---------------------------------- | --------------------------------------- |
+| 데이터를 가져올 대상이 되는 시간   | 가져온 데이터를 캐쉬에 저장하는 시간    |
+| staleTime 이후 Refetch 대상이 된다 | cacheTime 이후 데이터는 사용할 수 없다. |
