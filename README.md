@@ -37,9 +37,9 @@ useQuery({
 })
 ```
 
-| staleTime                          | cacheTime                               |
-| ---------------------------------- | --------------------------------------- |
-| 데이터를 가져올 대상이 되는 시간   | 가져온 데이터를 캐쉬에 저장하는 시간    |
+|             staleTime              |                cacheTime                |
+| :--------------------------------: | :-------------------------------------: |
+|  데이터를 가져올 대상이 되는 시간  |  가져온 데이터를 캐쉬에 저장하는 시간   |
 | staleTime 이후 Refetch 대상이 된다 | cacheTime 이후 데이터는 사용할 수 없다. |
 
 ## Query Key
@@ -67,3 +67,13 @@ queryClient.prefetchQuery({
   queryFn: () => Object,
 });
 ```
+
+## isLoading VS isFetching
+
+```tsx
+const { isLoading: boolean, isFetching: boolean } = useQuery();
+```
+
+|                      isLoading                      |        isFetching        |
+| :-------------------------------------------------: | :----------------------: |
+| isFetching 결과 && cache 에 저장된 데이터 존재 유무 | async 함수의 수행중 여부 |
