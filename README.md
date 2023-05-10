@@ -4,8 +4,6 @@ Code to support the Udemy course [React Query: Server State Management in React]
 
 [Original Code](https://github.com/bonnie/udemy-REACT-QUERY)
 
-## React Query
-
 - 클라이언트에서 서버 데이터 캐쉬 관리
 - 서버데이터가 필요할 때 Fetch 나 Axios 를 사용해 서버로 바로 이동하지 않고 React Query 캐쉬에서 데이터 요청
 - 캐쉬에 저장된 서버의 데이터를
@@ -22,6 +20,13 @@ Code to support the Udemy course [React Query: Server State Management in React]
 5. 페이지에서 동일한 데이터를 요청하는 경우 한번만 서버에 요청할 수 있다. 기존 데이터를 요청중인 경우 요청 제거 후 새로운 데이터 요청 가능
 6. 서버 오류에 대한 재요청 가능
 7. 서버 요청에 대한 실패 / 성공을 구분하여 콜백 요청 가능
+
+```tsx
+const { data } = useQuery({
+  queryKey: [...args],
+  queryFn: () => Object,
+});
+```
 
 ## staleTime VS cacheTime
 
@@ -45,5 +50,20 @@ useQuery({
 ```tsx
 useQuery({
   queryKey: [...args],
+});
+```
+
+## Pagination, prefetch
+
+- 데이터를 미리 가져와 캐쉬에 저장
+- 페이지 매김(Pagination) 에 주로 사용
+- 사용자가 기다릴 필요 없이 다음 페이지의 내용을 미리 가져와 cache 에 저장한다.
+- 기본적으로 미리 가져온 데이터는 stale(만료) 상태.
+
+```tsx
+const queryClient = useQueryClient();
+queryClient.prefetchQuery({
+  queryKey: [...args],
+  queryFn: () => Object,
 });
 ```
