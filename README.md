@@ -77,3 +77,22 @@ const { isLoading: boolean, isFetching: boolean } = useQuery();
 |                      isLoading                      |        isFetching        |
 | :-------------------------------------------------: | :----------------------: |
 | isFetching 결과 && cache 에 저장된 데이터 존재 유무 | async 함수의 수행중 여부 |
+
+## 변이(Mutation)
+
+- 서버에 데이터를 업데이트 하도록 요청
+
+1. 데이터를 업데이트하고 해당 데이터를 서버로 보내 서버의 데이터 업데이트
+2. 서버 데이터를 업데이트 하고 저장된 cache 의 데이터를 업데이트
+3. 서버 데이터를 업데이트 하고 저장된 cache 의 데이터를 삭제하고 새로운 데이터를 cache 에 저장(refetch)
+
+```tsx
+const { mutate, isError, isLoading, isSuccess } = useMutation({
+	mutationFn: () => void;
+})
+```
+
+- 쿼리키가 필요 없다.
+- isLoading 은 있지만 isFetching 은 없다.
+- mutate 함수를 리턴한다.
+- 기본적으로, 재시도를 하지 않는다.
