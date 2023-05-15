@@ -96,3 +96,26 @@ const { mutate, isError, isLoading, isSuccess } = useMutation({
 - isLoading 은 있지만 isFetching 은 없다.
 - mutate 함수를 리턴한다.
 - 기본적으로, 재시도를 하지 않는다.
+
+## useInfiniteQuery
+
+- 사용자의 액션에 따라 추가로 데이터를 가져오도록 요청
+
+```tsx
+const {
+	data,              // 가져온 데이터
+	hasNextPage,       // 다음 페이지의 유무
+	fetchNextPage,     // 다음 페이지를 가져오는 URL
+	hasPreviousPage,   // 이전 페이지의 유무
+	fetchPreviosPage,  // 이전 페이지를 가져오는 URL
+	isLoading,
+	isError,
+	error,
+	isFetching
+} = useInfiniteQuery({
+	queryKey: string[];
+	quertFn: (paramPage) => void;
+	getNextPageParam: (lastPage) => void;        // 결과값이 hasNextPage 로 부여
+	getPreviousPageParam: (lastPage) => void;    // 결과값이 hasPreviousPage 로 부여
+})
+```
