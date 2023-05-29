@@ -139,3 +139,21 @@ useQuery({
 ```tsx
 useCallback(() => {}, []);
 ```
+
+## Polling / re-fetching
+
+- 쿼리키가 처음 호출되거나, 현재창을 재포커스, 만료된 쿼리키, 네트워크가 다시연결되었을 때, 기본적으로 useQuery 가 수행된다.
+- useQuery에 제공되는 옵션을 이용하여 원하는 때에 useQuery를 수행하여 데이터를 관리할 수 있다.
+
+```tsx
+useQuery({
+  refetchOnMount: boolean, // 컴포넌트가 처음 로딩될 때
+  refetchOnWindowFocus: boolean, // 현재 창이 다시 활성화 되었을 때
+  refetchOnConnect: boolean, // 네트워크가 연결 되었을 때
+  refetchInterval: number, // refetch 간격
+});
+```
+
+- 변동이 잦지 않은 데이터에 대해서, staleTime 조정으로 리페치 간격 조정
+
+> staleTime 이 cacheTime 보다 클경우, 캐쉬에 데이터는 없지만 만료가 되지 않은 상태가 되어 데이터를 새로이 가져오지 않고 사용할 데이터도 존재하지 않아 해당 쿼리키가 만료될 때까지 데이터를 보여줄 수 없다. staleTime ≤ cacheTime 이 안정적.
