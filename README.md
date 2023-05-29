@@ -119,3 +119,23 @@ const {
 	getPreviousPageParam: (lastPage) => void;    // 결과값이 hasPreviousPage 로 부여
 })
 ```
+
+## useQuery select
+
+- useQuery 결과에 대하여 select 옵션을 사용하여 결과를 필터링 한다.
+- 제공하는 값의 변함에 따라 select 함수를 실행 가능
+
+```tsx
+useQuery({
+  select: (data) => filteredData,
+});
+```
+
+## \*\* React.useCallback
+
+- 사용하는 함수에 대하여 제공하는 값이 변함에 따라 함수를 수행 / 미수행 여부를 제공한다.
+- useEffect 와 비슷한 문법 사용
+
+```tsx
+useCallback(() => {}, []);
+```

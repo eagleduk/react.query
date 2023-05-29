@@ -1,7 +1,13 @@
 // @ts-nocheck
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
 import { axiosInstance } from '../../../axiosInstance';
 import { queryKeys } from '../../../react-query/constants';
@@ -59,6 +65,10 @@ export function useAppointments(): UseAppointments {
   // We need the user to pass to getAvailableAppointments so we can show
   //   appointments that the logged-in user has reserved (in white)
   const { user } = useUser();
+  const selectFn = useCallback(
+    (data) => getAvailableAppointments(data, user),
+    [user],
+  );
 
   /** ****************** END 2: filter appointments  ******************** */
   /** ****************** START 3: useQuery  ***************************** */
@@ -84,14 +94,13 @@ export function useAppointments(): UseAppointments {
   //
   //    2. The getAppointments query function needs monthYear.year and
   //       monthYear.month
-  const { data = [] } = useQuery({
+  const { data: appointments = [] } = useQuery({
     queryKey: [queryKeys.appointments, monthYear.year, monthYear.month],
     queryFn: () => getAppointments(monthYear.year, monthYear.month),
+    select: showAll ? undefined : selectFn,
   });
 
   /** ****************** END 3: useQuery  ******************************* */
-  const appointments = showAll ? data : getAvailableAppointments(data, user);
-
   return {
     appointments,
     monthYear,
