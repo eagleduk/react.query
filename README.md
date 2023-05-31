@@ -22,6 +22,12 @@ Code to support the Udemy course [React Query: Server State Management in React]
 7. 서버 요청에 대한 실패 / 성공을 구분하여 콜백 요청 가능
 
 ```tsx
+const queryClient = QueryClient();
+
+<QueryClientProvider client={queryClient}></QueryClientProvider>;
+```
+
+```tsx
 const { data } = useQuery({
   queryKey: [...args],
   queryFn: () => Object,
@@ -157,3 +163,23 @@ useQuery({
 - 변동이 잦지 않은 데이터에 대해서, staleTime 조정으로 리페치 간격 조정
 
 > staleTime 이 cacheTime 보다 클경우, 캐쉬에 데이터는 없지만 만료가 되지 않은 상태가 되어 데이터를 새로이 가져오지 않고 사용할 데이터도 존재하지 않아 해당 쿼리키가 만료될 때까지 데이터를 보여줄 수 없다. staleTime ≤ cacheTime 이 안정적.
+
+## setQueryData, removeQueryData
+
+```tsx
+const queryClient = useQueryClient();
+queryClient.setQueryData();
+queryClient.removeQueries();
+```
+
+- 캐쉬의 쿼리키에 데이터를 저장하거나 데이터를 삭제할 수 있다.
+
+## dependent Query(의존적 쿼리)
+
+```tsx
+useQuery({
+  enabled: boolean,
+});
+```
+
+- 해당 쿼리를 수행할지 여부 설정
