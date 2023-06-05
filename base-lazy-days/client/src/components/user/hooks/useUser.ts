@@ -34,21 +34,23 @@ export function useUser(): UseUser {
     queryKey: [queryKeys.user],
     queryFn: () => getUser(user),
     initialData: getStoredUser,
-    onSuccess: (response) =>
-      response ? setStoredUser(response) : clearStoredUser(),
+    onSuccess: (response) => {
+      response ? setStoredUser(response) : clearStoredUser();
+    },
   });
 
   // meant to be called from useAuth
   function updateUser(newUser: User): void {
     // TODO: update the user in the query cache
     queryClient.setQueryData([queryKeys.user], newUser);
+    setStoredUser(newUser);
   }
 
   // meant to be called from useAuth
   function clearUser() {
     // TODO: reset user to null in query cache
     queryClient.setQueryData([queryKeys.user], null);
-    queryClient.removeQueries(['user-appointment']);
+    queryClient.removeQueries([queryKeys.appointments, queryKeys.user]);
   }
 
   return { user, updateUser, clearUser };

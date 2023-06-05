@@ -29,8 +29,8 @@ const queryClient = QueryClient();
 
 ```tsx
 const { data } = useQuery({
-  queryKey: [...args],
-  queryFn: () => Object,
+  queryKey: unknown[];
+  queryFn: () => Object;
 });
 ```
 
@@ -38,14 +38,14 @@ const { data } = useQuery({
 
 ```tsx
 useQuery({
-	staleTime: number | Infinity
-	cacheTime: number | Infinity
+	staleTime: number | Infinity;
+	cacheTime: number | Infinity;
 })
 ```
 
-|             staleTime              |                cacheTime                |
-| :--------------------------------: | :-------------------------------------: |
-|  데이터를 가져올 대상이 되는 시간  |  가져온 데이터를 캐쉬에 저장하는 시간   |
+| staleTime                          | cacheTime                               |
+| ---------------------------------- | --------------------------------------- |
+| 데이터를 가져올 대상이 되는 시간   | 가져온 데이터를 캐쉬에 저장하는 시간    |
 | staleTime 이후 Refetch 대상이 된다 | cacheTime 이후 데이터는 사용할 수 없다. |
 
 ## Query Key
@@ -55,8 +55,8 @@ useQuery({
 
 ```tsx
 useQuery({
-  queryKey: [...args],
-});
+	queryKey: unknown[];
+})
 ```
 
 ## Pagination, prefetch
@@ -69,8 +69,8 @@ useQuery({
 ```tsx
 const queryClient = useQueryClient();
 queryClient.prefetchQuery({
-  queryKey: [...args],
-  queryFn: () => Object,
+  queryKey: unknown[];
+  queryFn: () => Object;
 });
 ```
 
@@ -80,8 +80,8 @@ queryClient.prefetchQuery({
 const { isLoading: boolean, isFetching: boolean } = useQuery();
 ```
 
-|                      isLoading                      |        isFetching        |
-| :-------------------------------------------------: | :----------------------: |
+| isLoading                                           | isFetching               |
+| --------------------------------------------------- | ------------------------ |
 | isFetching 결과 && cache 에 저장된 데이터 존재 유무 | async 함수의 수행중 여부 |
 
 ## 변이(Mutation)
@@ -119,7 +119,7 @@ const {
 	error,
 	isFetching
 } = useInfiniteQuery({
-	queryKey: string[];
+	queryKey: unknown[];
 	quertFn: (paramPage) => void;
 	getNextPageParam: (lastPage) => void;        // 결과값이 hasNextPage 로 부여
 	getPreviousPageParam: (lastPage) => void;    // 결과값이 hasPreviousPage 로 부여
@@ -133,7 +133,7 @@ const {
 
 ```tsx
 useQuery({
-  select: (data) => filteredData,
+	select: (data) => filteredData;
 });
 ```
 
@@ -153,10 +153,10 @@ useCallback(() => {}, []);
 
 ```tsx
 useQuery({
-  refetchOnMount: boolean, // 컴포넌트가 처음 로딩될 때
-  refetchOnWindowFocus: boolean, // 현재 창이 다시 활성화 되었을 때
-  refetchOnConnect: boolean, // 네트워크가 연결 되었을 때
-  refetchInterval: number, // refetch 간격
+	refetchOnMount: boolean;   // 컴포넌트가 처음 로딩될 때
+	refetchOnWindowFocus: boolean;  // 현재 창이 다시 활성화 되었을 때
+	refetchOnConnect: boolean;   // 네트워크가 연결 되었을 때
+	refetchInterval: number;    // refetch 간격
 });
 ```
 
@@ -178,8 +178,32 @@ queryClient.removeQueries();
 
 ```tsx
 useQuery({
-  enabled: boolean,
-});
+	enabled: boolean;
+})
 ```
 
 - 해당 쿼리를 수행할지 여부 설정
+
+## Mutation
+
+- 데이터 변형. 서버의 데이터를 업데이트
+- 데이터를 업데이트만 하기 때문에 캐쉬 데이터 개념이 없다
+- 캐쉬 데이터가 없음으로 실패시 재시도, refetch, isLoading, isfetching 개념도 없다.
+
+```jsx
+const { mutate } = useMutation({
+	mutationFn: void;
+	onSuccess: void;
+})
+```
+
+## QueryClient.invalidateQueries
+
+- 캐쉬 데이터를 무효화
+
+```jsx
+const queryClient = useQueryClient();
+queryClient.invalidateQueries({
+	queryKey: unknown[];
+})
+```
