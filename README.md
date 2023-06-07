@@ -207,3 +207,35 @@ queryClient.invalidateQueries({
 	queryKey: unknown[];
 })
 ```
+
+## 낙관적 업데이트
+
+- 서버로부터 응답을 받기 전에 캐쉬의 데이터를 업데이트 → 업데이트가 문제없이 이루어질것으로 추정한다.
+- 서버의 응답을 받기 전에 캐쉬 데이터를 업데이트 함으로 속도가 빠르지만, 서버에서 업데이트가 실패시 구현 로직이 복잡하다.
+- 에러가 발생하면 수행중이던 Query 를 취소해야 한다.
+
+```tsx
+const query = useQuery({
+  queryKey: ["todos"],
+  queryFn: ({ signal }) =>
+    axios.get("/todos", {
+      // Pass the signal to `axios`
+      signal,
+    }),
+});
+```
+
+- Axios 를 사용시, 취소할 수 있는 signal<AbortContoller> 를 추가해 주어야 한다.
+- **`AbortController` : 하나 이상의 웹 요청을 취소할 수 있게 해준다.**
+
+```tsx
+useMutation({
+	onMutate: (newData: customData) => oldData: customData;
+	onError: (error: unknown, variables: customData, context: void) => void;
+	onSettled: (data: User) => void;
+});
+```
+
+- onMutate 를 통해 낙관적 업데이트 진행, 업데이트 이전 데이터 반환
+- onError 를 통해 에러 발생시 onMutate 에서 반환된 업데이트 이전 데이터로 캐쉬를 업데이트
+- onSettled 를 통해 서버의 최신 데이터를 다시 가져온다

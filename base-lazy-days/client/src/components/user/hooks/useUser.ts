@@ -10,12 +10,16 @@ import {
   setStoredUser,
 } from '../../../user-storage';
 
-async function getUser(user: User | null): Promise<User | null> {
+async function getUser(
+  user: User | null,
+  signal: AbortSignal,
+): Promise<User | null> {
   if (!user) return null;
   const { data }: AxiosResponse<{ user: User }> = await axiosInstance.get(
     `/user/${user.id}`,
     {
       headers: getJWTHeader(user),
+      signal,
     },
   );
   return data.user;
@@ -32,7 +36,7 @@ export function useUser(): UseUser {
   // TODO: call useQuery to update user data from server
   const { data: user = [] } = useQuery({
     queryKey: [queryKeys.user],
-    queryFn: () => getUser(user),
+    queryFn: async ({ signal }) => getUser(user, signal),
     initialData: getStoredUser,
     onSuccess: (response) => {
       response ? setStoredUser(response) : clearStoredUser();
