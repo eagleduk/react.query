@@ -239,3 +239,26 @@ useMutation({
 - onMutate 를 통해 낙관적 업데이트 진행, 업데이트 이전 데이터 반환
 - onError 를 통해 에러 발생시 onMutate 에서 반환된 업데이트 이전 데이터로 캐쉬를 업데이트
 - onSettled 를 통해 서버의 최신 데이터를 다시 가져온다
+
+## testing-library
+
+- [msw (Mock Service Worker)](https://mswjs.io/) 사용
+
+```tsx
+npm install msw
+```
+
+- render(`@testing-library/react`) 를 사용해야 테스팅시 component 를 랜더링 한다.
+- useQuery hook 을 사용하기 위해 QueryClientProvider 를 사용하는 render 객체를 반환한다.
+
+```tsx
+export function renderWithQueryClient(
+  ui: ReactElement,
+  client?: QueryClient
+): RenderResult {
+  const queryClient = client ?? generateQueryClient();
+  return render(
+    <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>
+  );
+}
+```
