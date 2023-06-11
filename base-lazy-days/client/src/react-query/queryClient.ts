@@ -1,5 +1,5 @@
 import { createStandaloneToast } from '@chakra-ui/react';
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient, QueryClientConfig } from '@tanstack/react-query';
 
 import { theme } from '../theme';
 
@@ -15,19 +15,30 @@ function queryErrorHandler(error: unknown): void {
   toast({ title, status: 'error', variant: 'subtle', isClosable: true });
 }
 
+export function defaultQueryClient(logger?: {
+  log: () => void;
+  warn: () => void;
+  error: () => void;
+}): QueryClient {
+  const queryClientOption: QueryClientConfig = {
+    defaultOptions: {
+      queries: {
+        onError: queryErrorHandler,
+        staleTime: 1000 * 60 * 10, // 10 Min
+        cacheTime: 1000 * 60 * 15, // 15 Min
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+      },
+      mutations: {
+        onError: queryErrorHandler,
+      },
+    },
+  };
+  if (logger) queryClientOption.logger = logger;
+
+  return new QueryClient(queryClientOption);
+}
+
 // to satisfy typescript until this file has uncommented contents
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      onError: queryErrorHandler,
-      staleTime: 1000 * 60 * 10, // 10 Min
-      cacheTime: 1000 * 60 * 15, // 15 Min
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-    },
-    mutations: {
-      onError: queryErrorHandler,
-    },
-  },
-});
+export const queryClient = defaultQueryClient();

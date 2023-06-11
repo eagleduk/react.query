@@ -1,16 +1,33 @@
+// eslint-disable-next-line no-console
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, RenderResult } from '@testing-library/react';
 import { ReactElement } from 'react';
 
-const generateQueryClient = () => {
-  return new QueryClient();
+import { defaultQueryClient } from '../react-query/queryClient';
+
+const generateTestQueryClient = () => {
+  const client = defaultQueryClient({
+    log: console.log,
+    warn: console.warn,
+    error: () => {
+      // no log
+    },
+  });
+
+  const options = client.getDefaultOptions();
+  options.queries = {
+    ...options.queries,
+    retry: false,
+  };
+
+  return client;
 };
 
 export function renderWithQueryClient(
   ui: ReactElement,
   client?: QueryClient,
 ): RenderResult {
-  const queryClient = client ?? generateQueryClient();
+  const queryClient = client ?? generateTestQueryClient();
   return render(
     <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>,
   );
