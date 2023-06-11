@@ -30,6 +30,10 @@ async function getAppointments(
   return data;
 }
 
+function identity<T>(value: T): T {
+  return value;
+}
+
 // types for hook return object
 interface UseAppointments {
   appointments: AppointmentDateMap;
@@ -103,7 +107,7 @@ export function useAppointments(): UseAppointments {
   const { data: appointments = [] } = useQuery({
     queryKey: [queryKeys.appointments, monthYear.year, monthYear.month],
     queryFn: () => getAppointments(monthYear.year, monthYear.month),
-    select: showAll ? undefined : selectFn,
+    select: showAll ? (data) => identity<AppointmentDateMap>(data) : selectFn,
     ...commonFetchOption,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
