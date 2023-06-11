@@ -262,3 +262,11 @@ export function renderWithQueryClient(
   );
 }
 ```
+
+## testing summary
+
+- 쿼리 제공자(Provider) 로 컴포넌트와 훅을 래핑
+- 테스트별 별도 쿼리클라이언트(QueryClient) 를 사용하여 테스트간 교차 오염 방지
+- Production(배포) 시 사용될 쿼리클라이언트(QueryClient) 와 동일하게 구성
+- 오류가 화면(콘솔창)에 출력되지 않도록 구성
+- 테스트가 타임아웃되지 않도록 재시도 억제 및 재시도에 맞는 구성
